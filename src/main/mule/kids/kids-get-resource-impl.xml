@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:mongo="http://www.mulesoft.org/schema/mule/mongo"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/mongo http://www.mulesoft.org/schema/mule/mongo/current/mule-mongo.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="kids-get-resource-implFlow" doc:id="b8c02ac7-9b1a-4096-9563-034816865a2a" >
+		<logger level="INFO" doc:name="Start" doc:id="07e814ef-28e8-4c13-b084-0731ef2c97b2" message="Start - kids-get-resource-impl flow"/>
+		<ee:transform doc:name="Transform Message" doc:id="9f5750da-b758-44dc-bc21-0037445189af">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"_id": {
+		"\$oid": vars.guid
+		
+		}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<mongo:find-one-document collectionName="kid" doc:name="Find one document" doc:id="1bbe7c00-bd10-4c8c-95a3-b9a58f164e9e" config-ref="MongoDB_Config">
+			
+		</mongo:find-one-document>
+		<logger level="INFO" doc:name="Logger" doc:id="cc1f27fb-c8e0-430e-a00f-c8c157cb5c79" message="after find one document mongodb call"/>
+		<logger level="INFO" doc:name="Log payload" doc:id="6f48011f-5f8f-45a5-9b70-445d060a6f0b" message="#[payload]"/>
+	</flow>
+</mule>

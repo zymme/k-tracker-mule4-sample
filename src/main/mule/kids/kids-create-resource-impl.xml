@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:mongo="http://www.mulesoft.org/schema/mule/mongo" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/mongo http://www.mulesoft.org/schema/mule/mongo/current/mule-mongo.xsd">
+	
+	<flow name="kids-create-resource-implFlow" doc:id="710936cb-a78b-4ec4-8ec2-13e042d621af" >
+		<logger level="INFO" doc:name="Start" doc:id="7bd3382f-f66d-495c-9a31-33c323239ec6" message="#['entered ' ++ flow.name ++ ' for app ' ++ app.name]"/>
+		<logger level="INFO" doc:name="Log Payload" doc:id="3c7c8a80-0762-4205-b742-62318c6736c8" message="#[payload]"/>
+		<mongo:insert-document doc:name="Insert document" doc:id="986beb00-2019-4935-8aba-3bd67ddb4917" collectionName="kid" config-ref="MongoDB_Config"/>
+		<logger level="INFO" doc:name="Logger" doc:id="39d8f4e0-1f8f-40f2-8e4d-938d91ddda08" message="#['leaving - ' ++ flow.name]"/>
+	</flow>
+</mule>

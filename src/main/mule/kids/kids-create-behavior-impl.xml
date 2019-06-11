@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:amqp="http://www.mulesoft.org/schema/mule/amqp"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/amqp http://www.mulesoft.org/schema/mule/amqp/current/mule-amqp.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="kids-create-behavior-implFlow" doc:id="8d5741df-5831-4c38-9cf3-d1b17b51cce1" >
+		<logger level="INFO" doc:name="Start" doc:id="104210ed-902f-409e-8217-7cf988d8e325" message="#['entered ' ++ app.name ++ ' on flow ' ++ flow.name]"/>
+		<amqp:publish doc:name="Publish" doc:id="3afc1c29-da8c-410b-921f-e22b696cb324" config-ref="AMQP_Config" exchangeName="kidsEx">
+			<amqp:routing-keys >
+				<amqp:routing-key value="KBQ" />
+			</amqp:routing-keys>
+		</amqp:publish>
+		<logger level="INFO" doc:name="End" doc:id="134acfd1-9a5f-4612-a6a8-8c32d8870f11" message="#['end of ' ++ flow.name]"/>
+		<ee:transform doc:name="Transform Message" doc:id="cece9d00-039f-4000-a93b-f7ed25213ef7" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"message": "behvior dropped off successfully"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<error-handler >
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="8c080a59-bbd8-4962-b7f2-e1e3e0b00864" >
+				<logger level="INFO" doc:name="Logger" doc:id="eb9b237d-ea74-497e-96dd-b1a17c3f9a86" message="#['ERROR occured in behavior creation: ' ++ error.detailedDescription]"/>
+			</on-error-continue>
+		</error-handler>
+	</flow>
+</mule>
